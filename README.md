@@ -1,4 +1,4 @@
-# 🛡️ Chakravyuh: Chaos Control
+# 🛡️ Chakravyuh: Chaos & Control
 
 > **Hackathon Submission for Problem Statement 02: Chaos Control**  
 > An immersive, high-speed asymmetric multiplayer & single-player strategic arcade game set in a royal Indian cyber-mythic universe.
