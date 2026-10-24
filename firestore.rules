@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Hall of Fame: anyone can read; a signed-in player may only add their own,
+    // well-formed round result. Entries are immutable once written.
+    match /leaderboard/{entry} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['uid', 'name', 'score', 'stage', 'stageName', 'escaped', 'relics', 'traps', 'timeLeft', 'kind', 'diff', 'createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 24
+        && request.resource.data.score is int && request.resource.data.score >= 0 && request.resource.data.score <= 6000
+        && request.resource.data.relics is int && request.resource.data.relics >= 0 && request.resource.data.relics <= 3
+        && request.resource.data.traps is int && request.resource.data.traps >= 0 && request.resource.data.traps <= 200
+        && request.resource.data.stage in ['hampi', 'amber', 'varanasi']
+        && request.resource.data.kind in ['local', 'online', 'solo']
+        && request.resource.data.escaped is bool
+        && request.resource.data.createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // Per-player career stats, written only by their owner.
+    match /players/{uid} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'rounds', 'escapes', 'totalScore', 'bestScore', 'updatedAt'])
+        && request.resource.data.bestScore is int && request.resource.data.bestScore <= 6000;
+    }
+  }
+}

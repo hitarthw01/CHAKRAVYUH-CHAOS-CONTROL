@@ -1,0 +1,33 @@
+{
+  "name": "chakravyuh-chaos-control",
+  "version": "3.0.0",
+  "description": "Chakravyuh: Chaos & Control — asymmetric 2-player sabotage game (Problem Statement 02)",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis portable",
+    "web": "npx firebase-tools serve --only hosting",
+    "deploy": "npx firebase-tools deploy --only hosting,firestore,database",
+    "deploy:hosting": "npx firebase-tools deploy --only hosting",
+    "deploy:rules": "npx firebase-tools deploy --only firestore,database"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2"
+  },
+  "build": {
+    "appId": "com.chakravyuh.game",
+    "productName": "Chakravyuh",
+    "files": [
+      "index.html",
+      "electron/**"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  }
+}
